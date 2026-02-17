@@ -7,6 +7,15 @@ public class Player {
     private String name;
     private int numberOfGames = 0;
     private int numberOfWins = 0;
+    private int balance = 1000;
+
+    public int getBalance() {
+        return balance;
+    }
+
+    public void setBalance(int balance) {
+        this.balance = balance;
+    }
 
     @Override
     public String toString() {
@@ -14,6 +23,7 @@ public class Player {
                 "name='" + name + '\'' +
                 ", numberOfGames=" + numberOfGames +
                 ", numberOfWins=" + numberOfWins +
+                ", balance=" + balance +
                 ", hand=" + hand +
                 '}';
     }

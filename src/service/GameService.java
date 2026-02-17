@@ -2,6 +2,7 @@ package service;
 
 import dto.Card;
 import dto.GameResult;
+import dto.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,19 +41,37 @@ public class GameService {
         }
         return computerHand;
     }
-    public GameResult getGameResult(int pScore, int cScore){
-
+    public GameResult getGameResult(int pScore, int cScore, Player player){
+        int bid = player.getBalance();
         if (pScore > 21 && cScore > 21) {
+             bid-= 100;
+             player.setBalance(bid);
+            System.out.println("Your new balance: "+bid);
             return GameResult.LOSE;
         } else if (cScore > 21) {
+            bid += 100;
+            player.setBalance(bid);
+            System.out.println("Your new balance: "+bid);
             return GameResult.PLAYER;
         } else if (pScore > 21) {
+            bid -= 100;
+            player.setBalance(bid);
+            System.out.println("Your new balance: "+bid);
             return GameResult.COMPUTER;
         } else if (pScore > cScore) {
+            bid += 100;
+            player.setBalance(bid);
+            System.out.println("Your new balance: "+bid);
             return GameResult.PLAYER;
         } else if (cScore > pScore){
+            bid -= 100;
+            player.setBalance(bid);
+            System.out.println("Your new balance: "+bid);
             return GameResult.COMPUTER;
         } else {
+            bid -= 10;
+            player.setBalance(bid);
+            System.out.println("Your new balance: "+bid);
             return GameResult.DRAW;
         }
     }

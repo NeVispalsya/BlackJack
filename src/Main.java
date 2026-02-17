@@ -18,11 +18,15 @@ public class Main {
         System.out.println("Please enter your name :");
         String name = sc.nextLine();
 
+        System.out.println("Please enter your balance :");
+        int balance = sc.nextInt();
+
         System.out.println("Please enter number of games: ");
         int games = sc.nextInt();
         sc.nextLine();
 
         Player player = new Player(name);
+        player.setBalance(balance);
 
         System.out.println(String.format("%s want play %s games", player.getName(), games));
 
@@ -33,33 +37,38 @@ public class Main {
         int counter = 1;
 
         sc.nextLine();
+        if(player.getBalance() >= 100){
+            do {
+                System.out.println("-------------->>>>");
+                System.out.println(String.format("%s game form %s games", counter, games));
 
-        do {
-            System.out.println("-------------->>>>");
-            System.out.println(String.format("%s game form %s games", counter, games));
+                game(player, ds, gs, sc);
+                List<Card> computerHand = gs.getComputerHand(ds.getDeck());
 
-            game(player, ds, gs, sc);
-            List<Card> computerHand = gs.getComputerHand(ds.getDeck());
+                int pScore = gs.calculateHandScore(player.getHand());
+                int cScore = gs.calculateHandScore(computerHand);
 
-            int pScore = gs.calculateHandScore(player.getHand());
-            int cScore = gs.calculateHandScore(computerHand);
+                System.out.println("======");
 
-            System.out.println("======");
-            System.out.println("player hand : " + player.getHand() + " >>>> score : " + pScore );
-            System.out.println("computer hand : " + computerHand + " >>>> score : " + cScore );
+                System.out.println("player hand : " + player.getHand() + " >>>> score : " + pScore );
+                System.out.println("computer hand : " + computerHand + " >>>> score : " + cScore );
 
-            GameResult gr = gs.getGameResult(pScore, cScore);
-            System.out.println(gr);
+                GameResult gr = gs.getGameResult(pScore, cScore, player);
+                System.out.println(gr);
 
+            }
+            while (nextGame(counter++, games, sc,player));
+        }else{
+            System.out.println("You don't have enough money on your balance");
         }
-        while (nextGame(counter++, games, sc));
+
         System.out.println("THE END");
 
     }
 
 
-    private static boolean nextGame(int gameNumber, int games, Scanner sc){
-        if (gameNumber != games){
+    private static boolean nextGame(int gameNumber, int games, Scanner sc, Player player){
+        if (gameNumber != games && player.getBalance() >= 100){
             System.out.println("Next game ... [Y/N]");
             String input = sc.nextLine().toUpperCase();
 
@@ -86,9 +95,10 @@ public class Main {
             }
             hand.add(ds.dealCard());
             int score = gs.calculateHandScore(hand);
+            System.out.println("Your balance :"+pl.getBalance());
             System.out.println("player hand : " + hand + " >>>> score : " + score );
 
-            if (score < 21) {
+            if (score < 21 && pl.getBalance() >= 100) {
                 System.out.println("Next card ... [Y/N]");
                 nextCard = sc.nextLine().toUpperCase();
             } else {
